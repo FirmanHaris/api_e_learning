@@ -11,6 +11,7 @@ import (
 
 // repository berisi crud ke database
 type UserRepository interface {
+	// untuk bisa dibaca di service fungsi yg sudah dibuat harus di definikan di interface
 	GetAll(ctx context.Context) ([]*domain.User, error)
 }
 
@@ -22,6 +23,7 @@ func NewUserRepository(coll *mongo.Collection) UserRepository {
 	return &baseUserRepository{coll: coll}
 }
 
+// fungsi untuk mengconvert monggo cursor ke struct User digunakan jika mereturn data array dan tidak perlu di definikan di interface
 func curration(ctx context.Context, cursor *mongo.Cursor) ([]*domain.User, error) {
 	var result []*domain.User
 	for cursor.Next(ctx) {
@@ -35,6 +37,7 @@ func curration(ctx context.Context, cursor *mongo.Cursor) ([]*domain.User, error
 	return result, nil
 }
 
+// fungsi untuk mengambil semua data user dari database
 func (b *baseUserRepository) GetAll(ctx context.Context) ([]*domain.User, error) {
 	filter := bson.M{}
 	user, err := b.coll.Find(ctx, filter)
