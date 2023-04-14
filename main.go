@@ -35,7 +35,7 @@ func main() {
 
 	database := client.Database(os.Getenv("DATABASE_NAME"))
 
-	api := e.Group("api").Group("v1")
+	api := e.Group("/api").Group("/v1")
 
 	userv1 := InitializeV1UserRouteHandler(ctx, api, database)
 	userv1.V1UserRouteHandler()

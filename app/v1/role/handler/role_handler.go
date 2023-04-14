@@ -3,9 +3,9 @@ package handler
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/FirmanHaris/api_e_learning/app/v1/role/service"
+	"github.com/FirmanHaris/api_e_learning/utils/s"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,8 +21,5 @@ func NewRoleHandler(role service.RoleService, ctx context.Context) RoleHandler {
 // htpp berisi handler untuk api
 func (b *RoleHandler) GetAllRole(c echo.Context) error {
 	data, err := b.roleService.GetAllRole(b.ctx)
-	if err != nil {
-		return c.JSON(500, err)
-	}
-	return c.JSON(http.StatusOK, data)
+	return s.Auto(c, data, err)
 }

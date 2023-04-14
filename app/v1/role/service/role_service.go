@@ -6,11 +6,12 @@ import (
 
 	"github.com/FirmanHaris/api_e_learning/app/v1/role/repository"
 	"github.com/FirmanHaris/api_e_learning/domain"
+	"github.com/FirmanHaris/api_e_learning/utils/r"
 )
 
 // service berisi logika sebelum disimpan ke database
 type RoleService interface {
-	GetAllRole(ctx context.Context) ([]*domain.Role, error)
+	GetAllRole(ctx context.Context) ([]*domain.Role, r.Ex)
 }
 
 type baseRoleService struct {
@@ -21,6 +22,6 @@ func NewRoleService(roleRepo repository.RoleRepository) RoleService {
 	return &baseRoleService{roleRepo: roleRepo}
 }
 
-func (b *baseRoleService) GetAllRole(ctx context.Context) ([]*domain.Role, error) {
+func (b *baseRoleService) GetAllRole(ctx context.Context) ([]*domain.Role, r.Ex) {
 	return b.roleRepo.GetAll(ctx)
 }
