@@ -11,11 +11,11 @@ func AbortWithStatus(c echo.Context, status int, err error) error {
 	result := NewResultError(err)
 	result.Code = status
 	println(result.ErrorMessage)
-	return c.JSON(result.Code, err)
+	return c.JSON(result.Code, map[string]string{"error": err.Error()})
 }
 
-func AbortWithMessageStatus(c echo.Context, status int, message string) {
-	AbortWithStatus(c, status, errors.New(message))
+func AbortWithMessageStatus(c echo.Context, status int, message string) error {
+	return AbortWithStatus(c, status, errors.New(message))
 }
 
 func Auto(c echo.Context, data interface{}, err r.Ex) error {

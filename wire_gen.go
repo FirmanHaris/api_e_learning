@@ -8,8 +8,10 @@ package main
 
 import (
 	"context"
+	handler2 "github.com/FirmanHaris/api_e_learning/app/v1/role/handler"
 	repository2 "github.com/FirmanHaris/api_e_learning/app/v1/role/repository"
 	service2 "github.com/FirmanHaris/api_e_learning/app/v1/role/service"
+	"github.com/FirmanHaris/api_e_learning/app/v1/user/handler"
 	"github.com/FirmanHaris/api_e_learning/app/v1/user/repository"
 	"github.com/FirmanHaris/api_e_learning/app/v1/user/service"
 	"github.com/FirmanHaris/api_e_learning/routes/v1/role"
@@ -23,13 +25,15 @@ import (
 func InitializeV1UserRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) user.V1UserRouteHandler {
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(userRepository)
-	v1UserRouteHandler := user.NewV1UserRouteHandler(userService, echo2, context2, database)
+	userHandler := handler.NewUserHandler(userService, context2)
+	v1UserRouteHandler := user.NewV1UserRouteHandler(userHandler, echo2, context2, database)
 	return v1UserRouteHandler
 }
 
 func InitializeV1RoleRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) role.V1RoleRouteHandler {
 	roleRepository := repository2.NewRoleRepository(database)
 	roleService := service2.NewRoleService(roleRepository)
-	v1RoleRouteHandler := role.NewV1RoleRouteHandler(roleService, echo2, context2, database)
+	roleHandler := handler2.NewRoleHandler(roleService, context2)
+	v1RoleRouteHandler := role.NewV1RoleRouteHandler(roleHandler, echo2, context2, database)
 	return v1RoleRouteHandler
 }

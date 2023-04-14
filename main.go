@@ -19,7 +19,7 @@ func main() {
 	}
 	uri := os.Getenv("MONGODB_URI")
 	if uri == "" {
-		uri = "mongodb+srv://elearning:Belajaraja123@cluster0.tuqkerq.mongodb.net/?retryWrites=true&w=majority"
+		uri = "mongodb+srv://chronicle89:Belajaraja123@testing.7uzn8tb.mongodb.net/?retryWrites=true&w=majority"
 	}
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
