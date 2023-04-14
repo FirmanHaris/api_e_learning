@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	// v1 "github.com/FirmanHaris/api_e_learning/app/v1"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/mongo"
