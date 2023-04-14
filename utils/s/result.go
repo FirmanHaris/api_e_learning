@@ -11,7 +11,7 @@ func AbortWithStatus(c echo.Context, status int, err error) error {
 	result := NewResultError(err)
 	result.Code = status
 	println(result.ErrorMessage)
-	return c.JSON(result.Code, map[string]string{"error": err.Error()})
+	return c.JSON(result.Code, result)
 }
 
 func AbortWithMessageStatus(c echo.Context, status int, message string) error {
