@@ -16,11 +16,11 @@ import (
 func main() {
 	ctx := context.Background()
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+		log.Fatal("No .env file found")
 	}
 	uri := os.Getenv("MONGODB_URI")
 	if uri == "" {
-		log.Fatal("You must set your 'MONGODB_URI' environmental variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
+		uri = "mongodb+srv://elearning:Belajaraja123@cluster0.tuqkerq.mongodb.net/?retryWrites=true&w=majority"
 	}
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
@@ -36,9 +36,13 @@ func main() {
 
 	database := client.Database(os.Getenv("DATABASE_NAME"))
 
-	// app.RouteHandler(ctx, e, database)
-	v1 := InitializeV1RouteHandler(ctx, e, database)
-	v1.V1RouteHandler()
+	api := e.Group("api").Group("v1")
+
+	userv1 := InitializeV1UserRouteHandler(ctx, api, database)
+	userv1.V1UserRouteHandler()
+
+	rolev1 := InitializeV1RoleRouteHandler(ctx, api, database)
+	rolev1.V1RoleRouteHandler()
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "welcome to api e-learning techcode")

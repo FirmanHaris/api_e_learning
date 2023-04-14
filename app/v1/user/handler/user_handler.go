@@ -10,17 +10,17 @@ import (
 )
 
 type UserHandler struct {
-	User service.UserService
-	Ctx  context.Context
+	userService service.UserService
+	ctx         context.Context
 }
 
 func NewUserHandler(user service.UserService, ctx context.Context) UserHandler {
-	return UserHandler{User: user, Ctx: ctx}
+	return UserHandler{userService: user, ctx: ctx}
 }
 
 // htpp berisi handler untuk api
 func (b *UserHandler) GetAllUser(c echo.Context) error {
-	data, err := b.User.GetAllUser(b.Ctx)
+	data, err := b.userService.GetAllUser(b.ctx)
 	if err != nil {
 		return c.JSON(500, err)
 	}

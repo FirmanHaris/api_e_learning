@@ -7,4 +7,6 @@ type User struct {
 	Username string             `json:"username" bson:"username"`
 	Password string             `json:"password" bson:"password"`
 	Email    string             `json:"email" bson:"email"`
+	RoleID   primitive.ObjectID `json:"role_id" bson:"role_id"`
+	Log      Log                `json:"log" bson:"log"`
 }

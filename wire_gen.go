@@ -8,18 +8,28 @@ package main
 
 import (
 	"context"
-	"github.com/FirmanHaris/api_e_learning/app/v1"
+	repository2 "github.com/FirmanHaris/api_e_learning/app/v1/role/repository"
+	service2 "github.com/FirmanHaris/api_e_learning/app/v1/role/service"
 	"github.com/FirmanHaris/api_e_learning/app/v1/user/repository"
 	"github.com/FirmanHaris/api_e_learning/app/v1/user/service"
+	"github.com/FirmanHaris/api_e_learning/routes/v1/role"
+	"github.com/FirmanHaris/api_e_learning/routes/v1/user"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Injectors from wire.go:
 
-func InitializeV1RouteHandler(context2 context.Context, echo2 *echo.Echo, database *mongo.Database) v1.V1RouteHandler {
+func InitializeV1UserRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) user.V1UserRouteHandler {
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(userRepository)
-	v1RouteHandler := v1.NewV1RouteHandler(userService, echo2, context2, database)
-	return v1RouteHandler
+	v1UserRouteHandler := user.NewV1UserRouteHandler(userService, echo2, context2, database)
+	return v1UserRouteHandler
+}
+
+func InitializeV1RoleRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) role.V1RoleRouteHandler {
+	roleRepository := repository2.NewRoleRepository(database)
+	roleService := service2.NewRoleService(roleRepository)
+	v1RoleRouteHandler := role.NewV1RoleRouteHandler(roleService, echo2, context2, database)
+	return v1RoleRouteHandler
 }
