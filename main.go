@@ -47,5 +47,5 @@ func main() {
 		return c.String(http.StatusOK, "welcome to api e-learning techcode")
 	})
 
-	e.Logger.Fatal(e.Start(":1234"))
+	e.Logger.Fatal(e.Start(os.Getenv("PORT")))
 }
