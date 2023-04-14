@@ -19,8 +19,9 @@ type baseUserRepository struct {
 	coll *mongo.Collection
 }
 
-func NewUserRepository(coll *mongo.Collection) UserRepository {
-	return &baseUserRepository{coll: coll}
+func NewUserRepository(coll *mongo.Database) UserRepository {
+	user := coll.Collection("user")
+	return &baseUserRepository{coll: user}
 }
 
 // fungsi untuk mengconvert monggo cursor ke struct User digunakan jika mereturn data array dan tidak perlu di definikan di interface

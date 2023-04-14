@@ -14,6 +14,10 @@ type UserHandler struct {
 	Ctx  context.Context
 }
 
+func NewUserHandler(user service.UserService, ctx context.Context) UserHandler {
+	return UserHandler{User: user, Ctx: ctx}
+}
+
 // htpp berisi handler untuk api
 func (b *UserHandler) GetAllUser(c echo.Context) error {
 	data, err := b.User.GetAllUser(b.Ctx)
