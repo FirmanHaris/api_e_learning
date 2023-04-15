@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("No .env file found")
 	}
@@ -37,11 +38,8 @@ func main() {
 
 	api := e.Group("/api").Group("/v1")
 
-	userv1 := InitializeV1UserRouteHandler(ctx, api, database)
-	userv1.V1UserRouteHandler()
-
-	rolev1 := InitializeV1RoleRouteHandler(ctx, api, database)
-	rolev1.V1RoleRouteHandler()
+	route := InitializeRouteHandler(ctx, api, database)
+	route.Routes()
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "welcome to api e-learning techcode")

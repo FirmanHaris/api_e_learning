@@ -1,10 +1,10 @@
 // nama package sesuai nama folder
-package handler
+package http
 
 import (
 	"context"
 
-	"github.com/FirmanHaris/api_e_learning/app/v1/user/service"
+	"github.com/FirmanHaris/api_e_learning/service"
 	"github.com/FirmanHaris/api_e_learning/utils/s"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -4,8 +4,8 @@ package service
 import (
 	"context"
 
-	"github.com/FirmanHaris/api_e_learning/app/v1/user/repository"
 	"github.com/FirmanHaris/api_e_learning/domain"
+	"github.com/FirmanHaris/api_e_learning/repository"
 	"github.com/FirmanHaris/api_e_learning/utils/r"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

@@ -8,32 +8,23 @@ package main
 
 import (
 	"context"
-	handler2 "github.com/FirmanHaris/api_e_learning/app/v1/role/handler"
-	repository2 "github.com/FirmanHaris/api_e_learning/app/v1/role/repository"
-	service2 "github.com/FirmanHaris/api_e_learning/app/v1/role/service"
-	"github.com/FirmanHaris/api_e_learning/app/v1/user/handler"
-	"github.com/FirmanHaris/api_e_learning/app/v1/user/repository"
-	"github.com/FirmanHaris/api_e_learning/app/v1/user/service"
-	"github.com/FirmanHaris/api_e_learning/routes/v1/role"
-	"github.com/FirmanHaris/api_e_learning/routes/v1/user"
+	"github.com/FirmanHaris/api_e_learning/http"
+	"github.com/FirmanHaris/api_e_learning/repository"
+	"github.com/FirmanHaris/api_e_learning/routes"
+	"github.com/FirmanHaris/api_e_learning/service"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Injectors from wire.go:
 
-func InitializeV1UserRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) user.V1UserRouteHandler {
+func InitializeRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) role.RouteHandler {
+	roleRepository := repository.NewRoleRepository(database)
+	roleService := service.NewRoleService(roleRepository)
+	roleHandler := http.NewRoleHandler(roleService, context2)
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(userRepository)
-	userHandler := handler.NewUserHandler(userService, context2)
-	v1UserRouteHandler := user.NewV1UserRouteHandler(userHandler, echo2, context2, database)
-	return v1UserRouteHandler
-}
-
-func InitializeV1RoleRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) role.V1RoleRouteHandler {
-	roleRepository := repository2.NewRoleRepository(database)
-	roleService := service2.NewRoleService(roleRepository)
-	roleHandler := handler2.NewRoleHandler(roleService, context2)
-	v1RoleRouteHandler := role.NewV1RoleRouteHandler(roleHandler, echo2, context2, database)
-	return v1RoleRouteHandler
+	userHandler := http.NewUserHandler(userService, context2)
+	routeHandler := role.NewRouteHandler(roleHandler, userHandler, echo2, context2, database)
+	return routeHandler
 }
