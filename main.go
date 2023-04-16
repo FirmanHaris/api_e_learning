@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/FirmanHaris/api_e_learning/utils/validator"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -32,13 +33,13 @@ func main() {
 		}
 	}()
 
-	e := echo.New()
-
 	database := client.Database(os.Getenv("DATABASE_NAME"))
 
-	api := e.Group("/api").Group("/v1")
+	e := echo.New()
+	e.Validator = validator.InitValidator()
+	e.HTTPErrorHandler = validator.InitErrorHandler()
 
-	route := InitializeRouteHandler(ctx, api, database)
+	route := InitializeRouteHandler(ctx, e, database)
 	route.Routes()
 
 	e.GET("/", func(c echo.Context) error {

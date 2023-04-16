@@ -16,7 +16,7 @@ import (
 
 func InitializeRouteHandler(
 	context context.Context,
-	echo *echo.Group,
+	echo *echo.Echo,
 	database *mongo.Database,
 ) routes.RouteHandler {
 	wire.Build(

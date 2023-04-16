@@ -4,10 +4,10 @@ package http
 import (
 	"context"
 
+	"github.com/FirmanHaris/api_e_learning/payload"
 	"github.com/FirmanHaris/api_e_learning/service"
 	"github.com/FirmanHaris/api_e_learning/utils/s"
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UserHandler struct {
@@ -25,11 +25,24 @@ func (b *UserHandler) GetAllUser(c echo.Context) error {
 	return s.Auto(c, data, err)
 }
 func (b *UserHandler) GetUserById(c echo.Context) error {
-	_id := c.QueryParam("id")
-	id, err := primitive.ObjectIDFromHex(_id)
-	if err != nil {
-		return s.AbortWithMessageStatus(c, 422, "id is empty")
+	u := new(payload.UserGetByID)
+	if err := c.Bind(u); err != nil {
+		return err
 	}
-	result, error := b.userService.GetUserById(b.ctx, id)
+	if err := c.Validate(u); err != nil {
+		return err
+	}
+	result, error := b.userService.GetUserById(b.ctx, u.ID)
 	return s.Auto(c, result, error)
+}
+func (b *UserHandler) RegisterUser(c echo.Context) error {
+	u := new(payload.RegisterUserPayload)
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	if err := c.Validate(u); err != nil {
+		return err
+	}
+	result, err := b.userService.AddUser(b.ctx, u)
+	return s.Auto(c, result, err)
 }

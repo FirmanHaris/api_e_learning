@@ -18,7 +18,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeRouteHandler(context2 context.Context, echo2 *echo.Group, database *mongo.Database) role.RouteHandler {
+func InitializeRouteHandler(context2 context.Context, echo2 *echo.Echo, database *mongo.Database) role.RouteHandler {
 	roleRepository := repository.NewRoleRepository(database)
 	roleService := service.NewRoleService(roleRepository)
 	roleHandler := http.NewRoleHandler(roleService, context2)

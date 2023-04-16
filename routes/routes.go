@@ -12,7 +12,7 @@ import (
 type RouteHandler struct {
 	roleHandler http.RoleHandler
 	userHandler http.UserHandler
-	echo        *echo.Group
+	echo        *echo.Echo
 	context     context.Context
 	database    *mongo.Database
 }
@@ -20,7 +20,7 @@ type RouteHandler struct {
 func NewRouteHandler(
 	role http.RoleHandler,
 	user http.UserHandler,
-	echo *echo.Group,
+	echo *echo.Echo,
 	ctx context.Context,
 	database *mongo.Database,
 ) RouteHandler {
@@ -34,11 +34,13 @@ func NewRouteHandler(
 }
 
 func (b *RouteHandler) Routes() {
+	api := b.echo.Group("/api").Group("/v1")
 
-	roleApi := b.echo.Group("/role")
+	roleApi := api.Group("/role")
 	roleApi.GET("/all", b.roleHandler.GetAllRole)
 
-	userApi := b.echo.Group("/user")
+	userApi := api.Group("/user")
 	userApi.GET("/all", b.userHandler.GetAllUser)
 	userApi.GET("/id", b.userHandler.GetUserById)
+	userApi.GET("/register", b.userHandler.RegisterUser)
 }
