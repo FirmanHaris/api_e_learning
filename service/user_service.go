@@ -3,6 +3,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/FirmanHaris/api_e_learning/domain"
@@ -19,6 +20,7 @@ type UserService interface {
 	GetUserById(ctx context.Context, id primitive.ObjectID) (*domain.User, r.Ex)
 	AddUser(ctx context.Context, payload *payload.RegisterUserPayload) (primitive.ObjectID, r.Ex)
 	UpdateUser(ctx context.Context, data *domain.User) r.Ex
+	UpdatePasswordUser(ctx context.Context, payload *payload.UpdatePasswordPayload) r.Ex
 	DeleteUser(ctx context.Context, data *domain.User) r.Ex
 }
 
@@ -59,6 +61,21 @@ func (b *baseUserService) AddUser(ctx context.Context, payload *payload.Register
 }
 func (b *baseUserService) UpdateUser(ctx context.Context, data *domain.User) r.Ex {
 	return b.userRepo.Update(ctx, data)
+}
+func (b *baseUserService) UpdatePasswordUser(ctx context.Context, payload *payload.UpdatePasswordPayload) r.Ex {
+	user, err := b.userRepo.GetById(ctx, payload.ID)
+	if err != nil {
+		return err
+	}
+	if password.CheckPasswordHash(payload.OldPassowrd, user.Password) {
+		newPassword, err := password.HashPassword(payload.NewPassword)
+		if err != nil {
+			return r.NewErr(err.Error())
+		}
+		user.Password = newPassword
+		return b.userRepo.Update(ctx, user)
+	}
+	return r.NewErr(errors.New("wrong old password").Error())
 }
 func (b *baseUserService) DeleteUser(ctx context.Context, data *domain.User) r.Ex {
 	return b.userRepo.Delete(ctx, data)

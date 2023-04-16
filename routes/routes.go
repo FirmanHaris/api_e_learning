@@ -41,6 +41,7 @@ func (b *RouteHandler) Routes() {
 
 	userApi := api.Group("/user")
 	userApi.GET("/all", b.userHandler.GetAllUser)
-	userApi.GET("/id", b.userHandler.GetUserById)
-	userApi.GET("/register", b.userHandler.RegisterUser)
+	userApi.GET("/single/:id", b.userHandler.GetUserById)
+	userApi.POST("/register", b.userHandler.RegisterUser)
+	userApi.POST("/update/password", b.userHandler.UpdatePasswordUser)
 }

@@ -10,5 +10,11 @@ type RegisterUserPayload struct {
 }
 
 type UserGetByID struct {
-	ID primitive.ObjectID `json:"id" query:"id" param:"id" validate:"required"`
+	ID primitive.ObjectID `json:"id" query:"id" param:"id" form:"id" validate:"required"`
+}
+
+type UpdatePasswordPayload struct {
+	UserGetByID
+	NewPassword string `json:"new_password" form:"new_password" validate:"required"`
+	OldPassowrd string `json:"old_passowrd" form:"old_password" validate:"required"`
 }

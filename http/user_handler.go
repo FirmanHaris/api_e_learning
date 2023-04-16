@@ -3,6 +3,7 @@ package http
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/FirmanHaris/api_e_learning/payload"
 	"github.com/FirmanHaris/api_e_learning/service"
@@ -45,4 +46,17 @@ func (b *UserHandler) RegisterUser(c echo.Context) error {
 	}
 	result, err := b.userService.AddUser(b.ctx, u)
 	return s.Auto(c, result, err)
+}
+func (b *UserHandler) UpdatePasswordUser(c echo.Context) error {
+	u := new(payload.UpdatePasswordPayload)
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	if err := c.Validate(u); err != nil {
+		return err
+	}
+	if err := b.userService.UpdatePasswordUser(b.ctx, u); err != nil {
+		return s.AbortWithMessage(c, err.Error())
+	}
+	return s.AbortWithMessageStatus(c, http.StatusOK, "password updated")
 }
