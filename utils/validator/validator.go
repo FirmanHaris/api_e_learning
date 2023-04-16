@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/FirmanHaris/api_e_learning/utils/s"
 	validator "github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
@@ -40,7 +41,8 @@ func InitErrorHandler() echo.HTTPErrorHandler {
 		}
 
 		c.Logger().Error(report)
-		c.JSON(report.Code, report)
+		s.AbortWithMessageStatus(c, report.Code, fmt.Sprintf("%s", report.Message))
+		// c.JSON(report.Code, report)
 	}
 }
 
